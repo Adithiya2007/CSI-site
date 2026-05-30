@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       framer: path.resolve(__dirname, 'src/framer-stub.ts'),
+      encoding: false,
     };
     if (!isServer) {
       config.resolve.fallback = {
