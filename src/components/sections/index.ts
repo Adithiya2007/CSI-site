@@ -1,0 +1,10 @@
+export { AboutUs } from "./AboutUs";
+export { Departments } from "./Departments";
+export { Events } from "./Events";
+export { Projects } from "./Projects";
+export { Blog } from "./Blog";
+export { Team } from "./Team";
+export { Contact } from "./Contact";
+export { Partners } from "./Partners";
+export { Community } from "./Community";
+export { CsiOfficial } from "./CsiOfficial";

@@ -1,66 +1,124 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import React, { useState } from "react";
+import DesktopWindow from "@/components/DesktopWindow";
+import { AboutUs, Departments, Events, Projects, Blog, Team, Contact, Partners, Community, CsiOfficial } from "@/components/sections";
+import MacDock from "@/components/MacDock";
+import CursorEyes from "@/components/CursorEyes";
+import Launchpad from "@/components/Launchpad";
+
+type WindowId = "about" | "depts" | "events" | "projects" | "blog" | "team" | "contact" | "partners" | "community" | "csi";
+
+export default function Desktop() {
+  const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
+  const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
+  const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
+
+  const toggleWindow = (id: string) => {
+    if (id === "more") {
+      setIsLaunchpadOpen(!isLaunchpadOpen);
+      return;
+    }
+
+    const winId = id as WindowId;
+    if (openWindows.includes(winId)) {
+      if (activeWindow === winId) {
+        setOpenWindows(openWindows.filter((w) => w !== winId));
+        setActiveWindow(openWindows.length > 1 ? openWindows[0] : null);
+      } else {
+        setActiveWindow(winId);
+      }
+    } else {
+      setOpenWindows([...openWindows, winId]);
+      setActiveWindow(winId);
+    }
+  };
+
+  const closeWindow = (id: WindowId) => {
+    setOpenWindows(openWindows.filter((w) => w !== id));
+    if (activeWindow === id) {
+      setActiveWindow(openWindows.length > 1 ? openWindows[0] : null);
+    }
+  };
+
+  const renderWindowContent = (id: WindowId) => {
+    switch (id) {
+      case "about": return <AboutUs />;
+      case "depts": return <Departments />;
+      case "events": return <Events />;
+      case "projects": return <Projects />;
+      case "blog": return <Blog />;
+      case "team": return <Team />;
+      case "contact": return <Contact />;
+      case "partners": return <Partners />;
+      case "community": return <Community />;
+      case "csi": return <CsiOfficial />;
+      default: return null;
+    }
+  };
+
+  const getWindowTitle = (id: WindowId) => {
+    switch (id) {
+      case "about": return "About Us";
+      case "depts": return "Domains";
+      case "events": return "Events";
+      case "projects": return "Projects";
+      case "blog": return "Blog";
+      case "team": return "Team";
+      case "contact": return "Contact";
+      case "partners": return "Partners";
+      case "community": return "Community";
+      case "csi": return "CSI Official Site";
+      default: return "Window";
+    }
+  };
+
+  const launchpadItems = [
+    { id: "team", label: "Team", iconSrc: "/icons/Notion.png" },
+    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
+    { id: "blog", label: "Blogs", iconSrc: "/icons/blogs.png" },
+    { id: "partners", label: "Partners", iconSrc: "/icons/Slack.png" },
+    { id: "contact", label: "Contact", iconSrc: "/icons/Mail.png" },
+    { id: "community", label: "Community", iconSrc: "/icons/community.png" },
+  ];
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+    <main style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#050505" }}>
+      {/* Background Layer: The user will place their custom image here */}
+      <div id="user-bg-image" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        {/* User's custom background image will go here */}
+      </div>
+
+      {/* Eyes Layer that follows cursor */}
+      <CursorEyes />
+
+      {/* Window Manager Layer */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+        {openWindows.map((id, index) => (
+          <div key={id} style={{ pointerEvents: "auto" }}>
+            <DesktopWindow
+              id={id}
+              title={getWindowTitle(id)}
+              isActive={activeWindow === id}
+              onFocus={() => setActiveWindow(id)}
+              onClose={() => closeWindow(id)}
+              defaultPosition={{ x: 100 + index * 40, y: 100 + index * 40 }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              {renderWindowContent(id)}
+            </DesktopWindow>
+          </div>
+        ))}
+      </div>
+
+      <Launchpad 
+        isOpen={isLaunchpadOpen} 
+        onClose={() => setIsLaunchpadOpen(false)} 
+        onOpenApp={toggleWindow} 
+        items={launchpadItems} 
+      />
+
+      {/* Mac Dock Layer */}
+      <MacDock onOpen={toggleWindow} />
+    </main>
   );
 }
