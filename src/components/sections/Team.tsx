@@ -42,7 +42,6 @@ export function Team() {
     }
   ];
 
-  // Duplicate members to create a "fake" infinite loop
   const loopedMembers = Array(20).fill(members).flat();
 
   return (
