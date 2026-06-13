@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import DesktopWindow from "@/components/DesktopWindow";
-import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial, Notes } from "@/components/sections";
+import { AboutUs, Departments, Events, Projects, Team, Contact, CsiOfficial } from "@/components/sections";
 import MacDock from "@/components/MacDock";
 import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
 import Spotlight from "@/components/Spotlight";
 
-type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi" | "notes";
+type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi" ;
 
 export default function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
@@ -66,7 +66,6 @@ export default function Desktop() {
       case "team": return <Team />;
       case "contact": return <Contact />;
       case "csi": return <CsiOfficial />;
-      case "notes": return <Notes />;
       default: return null;
     }
   };
@@ -93,7 +92,6 @@ export default function Desktop() {
     { id: "team", label: "Team", iconSrc: "/icons/Notion.png" },
     { id: "contact", label: "Contact", iconSrc: "/icons/Mail.png" },
     { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
-    { id: "notes", label: "Notes", iconSrc: "/icons/Notion.png" },
   ];
 
   return (
